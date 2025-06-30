@@ -1,0 +1,852 @@
+---
+title: "Przegląd podstawowych metod statystycznych wykorzystywanych podczas przeprowadzania badania typu exit poll"
+author: "Oliwia Makuch"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true
+    fig_caption: true
+    fig_width: 5
+    fig_height: 4
+    number_sections: true
+    latex_engine: xelatex
+  html_document:
+    toc: true
+    df_print: paged
+header-includes:
+- \pretocmd{\tableofcontents}{\clearpage}{}{}
+- \usepackage[utf8]{inputenc}
+- \usepackage[polish]{babel}
+- \usepackage{graphicx}
+- \usepackage{float}
+- \usepackage{pdflscape}
+- \usepackage{hyperref}
+- \usepackage{amsmath}
+- \usepackage{booktabs}
+- \usepackage{float}
+- \allowdisplaybreaks
+- \newcommand{\supref}[1]{\textsuperscript{\hyperref[zr#1]{[#1]}}}
+fontsize: 12pt
+---
+
+\newpage
+
+# Wstęp
+
+W pracy przedstawiono wybór podstawowych metod statystycznych wykorzystywanych do przeprowadzania i analizy danych pochodzących z ankiety typu *exit poll*. Omówiono kluczowe zagadnienia związane z tego rodzaju badaniami, wskazano problemy pojawiające się na etapie ich realizacji oraz zaproponowano hipotezy dotyczące rozwiązań, które mogą zwiększyć dokładność prognoz opartych na wynikach ankiet. Szczególną uwagę zwrócono na zagadnienia związane z doborem próby, który ma kluczowe znaczenie dla reprezentatywności oraz wiarygodności wyników. W zależności od omawianej metody posłużono się danymi rzeczywistymi, symulacjami lub odwołano się do opracowań innych autorów zawierających odpowiednie analizy.
+
+Celem pracy jest przedstawienie wybranych metod statystycznych, które pozwalają poprawić jakość analizy danych zebranych podczas *exit poll* oraz lepiej zrozumieć źródła potencjalnych błędów. Omówienie tych metod może również posłużyć jako punkt wyjścia do refleksji nad możliwymi kierunkami doskonalenia badań wyborczych w Polsce.
+
+Pełna treść pracy wraz z kodem źródłowym i danymi użytymi w analizach dostępna jest w repozytorium.
+
+## Definicja
+
+*Exit poll* w znaczeniu podstawowym to sondaż przeprowadzany wśród osób opuszczających określone miejsce lub wydarzenie, mający na celu zebranie opinii lub informacji na temat ich zachowań bądź doświadczeń. W kontekście wyborów jest to badanie opinii publicznej realizowane wśród wyborców tuż po oddaniu głosu, służące oszacowaniu wyników wyborów przed ich oficjalnym ogłoszeniem. Do zadań ankieterów należy zatrzymywanie wyborców bezpośrednio po opuszczeniu lokalu wyborczego, wybranego w ramach losowej próby lokali na terenie kraju, przeprowadzanie z nimi wywiadów oraz zbieranie danych zapewniających reprezentatywność badanej próby. Zazwyczaj proces ten odbywa się przy użyciu formularza fizycznie zbliżonego do karty do głosowania, który po wypełnieniu jest wrzucany do przygotowanej urny, co ma gwarantować anonimowość oddanego głosu.
+
+## Funkcje
+
+W Polsce *exit poll* przeprowadza się głównie na zlecenie mediów, zwłaszcza dużych stacji telewizyjnych. Między innymi w wyborach prezydenckich 2015, 2020 i 2025 firmą przeprowadzającą to badanie dla TVP, TVN i Polsatu był IPSOS.\supref{1} Celem takiego badania jest przede wszystkim przewidywanie wyników wyborów przed podaniem oficjalnych danych przez PKW. Wraz z czasem kwestionariusz był uzupełniany o dodatkowe pytania, dotyczące m.in. płci, wieku czy kwesti pozademograficznych, m.in. oceny kandydatów, dzięki czemu badanie zyskało nową funkcję - określania uwarunkowań preferencji wyborczych. W krajach z zachwianymi standardami demokracji, wyniki badania służyć mogą również weryfikacji uczciwości elekcji.\supref{2}
+
+## Zalety
+
+W pracach wielu politologów porównuje się zalety badania typu *exit poll* z innymi metodami służącymi przewidywaniu wyników elekcji, głównie wywiadem telefonicznym i badaniami przedwyborczymi. Zaletami mogącymi wpływać na zmniejszenie błędu pomiarowego w trakcie przeprowadzania badania, są między innymi:
+
+-   Lepszy dobór próby (przy założeniu poprawnego warstwowania i pracy ankieterów) - grupą docelową badania *exit poll* nie jest cały przekrój Polaków uprawnionych do głosowania, lecz osoby opuszczające lokal wyborczy, a co za tym idzie - z dużym prawdopodobieństwem takie, które już oddały swój głos.
+
+-   Pytanie zadanie w ankiecie typu *exit poll* nie dotyczy zamiarów wyborców, ale podjętych przez nich działań - mamy do czynienia z rzeczywistymi zachowaniami, a nie deklaracjami.
+
+-   Problem braków odpowiedzi jest dużo mniejszy niż np. podczas wywiadu telefonicznego. Podczas badania przeprowadzonego przez OBOP w 2010 roku *response rate* przekroczył 90%, podczas gdy zgodę na wzięcie udziału w badaniu telefonicznym przeprowadzonym przez MB SMG/KRC wyraziło od 7 do 15% ankietowanych.
+
+-   Z uwagi na przeprowadzanie badania w krótkim odstępie czasu po rzeczywistym oddaniu głosu przez ankierowanego, znacznie zmniejsza się problem związany z pamięcią respondenta.
+
+-   Badania typu *exit poll* przeprowadzane są od wielu lat na dużej próbie głosujących, dzięki czemu możemy korzystać z danych historycznych do dokładniejszego prognozowania obecnie trwających wyborów.
+
+-   *Exit poll* wyraźnie ogranicza zjawisko koniunkturalizmu deklaracji powyborczych w zakresie preferencji, gdyż jest przeprowadzany w dniu elekcji, gdy respondenci nie mają wiedzy na temat wyników głosowania. Nie oznacza to, że problem społecznie pożądanej odpowiedzi w tym przypadku nie istnieje, jest jednak znacznie mniejszy niż np. w badaniach przeprowadzanych po ogłoszeniu oficjalnych wyników w celu zbadania charakterystyki osób podejmujących określone wybory.
+
+Dokładną analizę porównującą sondaże zrealizowane w trakcie pierwszej i drugiej tury wyborów prezydenckich w 2010 roku przeprowadził mgr Konrad Kuźma w artykule *Badanie wyborcze realizowane w dniu wyborów prezydenckich w 2010 roku jako przykład badania realizowanego w miejscu publicznym*\supref{3}. Wynika z niego, że w zestawieniu z oficjalnymi wynikami wyborów, opublikowanymi przez PKW, prognozy oparte o badania typu *exit poll* znacznie lepiej przewidują rzeczywiste proporcje oddanych głosów.
+
+## Wady
+
+Mimo wspomnianych zalet, osoby planujące i realizujące badania typu exit poll mierzą się z wieloma przeszkodami, które utrudniają osiągnięcie zadowalających rezultatów. Warto w tym kontekście zwrócić uwagę na problem percepcji wyników exit poll przez odbiorców, który został omówiony m.in. przez dr. hab. Adama Gendźwiłła i mgr. Jakuba Rutkowskiego\supref{4}.
+
+> „Minimalnym wymogiem w stosunku do instytutów badawczych i dziennikarzy publikujących wyniki exit poll powinno być bardzo wyraźne informowanie, że dane prezentowane w czasie wieczorów wyborczych nie są po prostu efektem badania sondażowego, ale prognozą dokonaną na jego podstawie."
+
+Wynika z tego, że ewentualne odchylenia od oficjalnych wyników wyborów niekoniecznie muszą być skutkiem błędów w doborze próby czy odpowiedziach respondentów, lecz mogą wynikać z nieprecyzyjnego sposobu przekształcania wyników sondażu w prognozę głosowania. Problemy te wynikają nie tylko z możliwej niereprezentatywności próby, ale również z jakości uzyskanych odpowiedzi oraz rzetelności samych respondentów.
+
+Najważniejszymi wadami, które wpływają na dokładność prognoz opartych o dane zebrane podczas badań typu *exit poll* są między innymi:
+
+-   Deklaratywny charakter badania - *exit poll*, pomimo tego, że dotyczy podjętych działań, a nie samych preferencji czy zamierzeń, wciąż opiera się na ustnych wypowiedziach wyborców, w związku z czym jest obarczony błędem - głosujący mogą ukrywać swoje rzeczywiste wybory.
+
+-   Spełnienie przez próbę założeń o reprezentatywności - aby wyniki były wiarygodne, wylosowana lub dobrana próba lokali oraz respondentów musi dobrze odzwierciedlać strukturę całej populacji wyborców. Niezachowanie tych założeń powoduje błędy w późniejszych prognozach.
+
+-   Odmowa udziału w badaniu - część wyborców może odmówić udziału w *exit poll*, co prowadzi do tzw. błędu nieodpowiedzi. Jeśli odmowa udziału nie jest losowa, lecz zależy od określonych cech respondentów (np. wieku, preferencji politycznych), próba staje się mniej reprezentatywna, co zniekształca wyniki prognozy. Taki wniosek wyciągnął m.in. Warren Mitkofsky, uważany za twórcę obecnej formy przeprowadzania *exit poll*, zapytany o różnice między prognozą na podstawie badania a rzeczywistymi wynikami wyborów w Stanach Zjednoczonych w 2004 roku („Well, Kerry was ahead (...) in a number of the states by margins that looked unreasonable to us. And we suspect that the reason, the main reason, was that the Kerry voters were more anxious to participate in our exit polls than the Bush voters."\supref{5}).
+
+    Należy wspomnieć, że w tym przypadku hipotezą stawianą przez wielu politologów jako wyjaśnienie niedokładności przeprowadzonej estymacji był negatywny wpływ wcześniejszego wycieku wyników sondaży exit poll na zachowania wyborców w ostatnich godzinach głosowania, co mogło zaburzyć pierwotnie zarejestrowany rozkład głosów.
+
+-   Kosztowność operacji - organizacja badania *exit poll* wiąże się z wysokimi kosztami logistycznymi i personalnymi. Konieczne jest zatrudnienie dużej liczby przeszkolonych ankieterów, zapewnienie im materiałów i koordynacja pracy w wielu lokalach wyborczych w całym kraju w krótkim czasie. Ograniczenia budżetowe mogą wpływać na jakość realizacji badania, a tym samym – na dokładność wyników. Należy zadać sobie pytanie, czy w związku z kosztami należy np. wyłączyć z próby lokale, w których liczba głosujących jest zbyt niska, aby uzasadnić podnoszenie kosztów logistycznych i organizacyjnych - choć takie działanie może negatywnie wpłynąć na reprezentatywność badania i dokładność h badania. Zwiększanie liczebności próby statystycznej prowadzi do poprawy precyzji estymacji, jednak wiąże się również ze wzrostem kosztów operacyjnych.
+
+-   Nieuwzględnienie nietypowych lokali wyborczych, m.in. tych znajdujących się w więzieniach czy na statkach. W Polsce problem ten nie jest uważany za szczególnie istotny ze względu na marginalny udział głosów oddawanych w tego typu lokalach oraz brak powszechnej możliwości głosowania korespondencyjnego czy wcześniejszego, które znacząco zwiększałyby skalę tego zjawiska. Inaczej jest m.in. w Stanach Zjednoczonych, gdzie wyróżnia się grupę tzw. *absentee voters* oraz *early voters*, którzy według wyników badań są starsi, lepiej wyedukowani i mogą mieć inne preferencje wyborcze niż respondenci głosujący w typowych lokalach wyborczych.\supref{6}.
+
+-   Błędna organizacja, nieuwaga lub nierzetelna praca ankieterów - między innymi w sytuacji, gdy osoba wybrana do badania zostaje pominięta wskutek błędu lub ankieterzy rezygnują z ustaleń podjętych przed rozpoczęciem badania i decydują się na przeprowadzenie badania na osobach, które ich zdaniem będą bardziej skłonne do wzięcia udziału w wywiadzie, np. młodszych.
+
+-   Pojawianie się błędów pomiaru związanych z wieloma potencjalnymi przyczynami, takimi jak wpływ ankietera, kolejność i brzmienie pytań, forma pytań czy samo rozproszenie odpowiadających wynikające z przeprowadzania badania w warunkach odbiegających od standardowego środowiska ankietowego.
+
+## Znaczenie metod statystycznych w badaniu *exit poll*
+
+Jak wspomniano wcześniej, badanie typu exit poll generuje dane, których użyteczność zależy w dużej mierze od jakości ich analizy. Aby prognozy wyborcze były wiarygodne i precyzyjne, konieczne jest zastosowanie odpowiednich metod statystycznych, które pozwolą m.in. skorygować błędy próby, uzupełnić braki w danych oraz oszacować niepewność wyników. Dobór metod analitycznych wpływa bezpośrednio na dokładność i wiarygodność prognoz wyborczych prezentowanych opinii publicznej.
+
+Przez metodę statystyczną w niniejszej pracy rozumie się sposób zbierania, przetwarzania, analizowania lub interpretowania danych liczbowych (ilościowych lub jakościowych), który umożliwia formułowanie wiarygodnych wniosków na temat badanej populacji lub zjawiska. Pojęcie to obejmuje zarówno techniki doboru próby, jak i procedury estymacji, testowania hipotez, modelowania zależności między zmiennymi oraz korygowania błędów pomiarowych.
+
+\newpage
+
+# Przegląd metod statystycznych
+
+W kolejnych rozdziałach pracy przedstawione zostaną wybrane metody statystyczne, które odgrywają istotną rolę w analizie danych z exit poll. Dla każdej z nich wskazane zostaną podstawowe założenia, możliwości zastosowania oraz potencjalne ograniczenia. W niektórych przypadkach wspomniano również o hipotezach i propozycjach innowacyjnych podejść, które ze względu na swoją złożoność wykraczają poza zakres tej pracy; wskazano jednak odpowiednie odniesienia literaturowe umożliwiające dalsze pogłębienie tematu.
+
+## Metody doboru punktów wyborczych
+
+W badaniach *exit poll* zazwyczaj stosuje się dwustopniowy schemat losowania. Na pierwszym stopniu wybiera się punkty wyborcze (obwody), w których będą prowadzone ankiety, a na drugim stopniu losuje się respondentów w wybranych punktach.
+
+W badaniach exit poll kluczowym etapem jest wybór odpowiednich punktów wyborczych, czyli obwodów, w których będą przeprowadzane ankiety. Dobór ten musi zapewniać reprezentatywność próby, aby wyniki badania dobrze odzwierciedlały preferencje całej populacji wyborców. W praktyce stosuje się różne techniki wyboru tych punktów, które różnią się pod względem sposobu selekcji oraz uwzględnienia specyfiki lokalnych struktur wyborczych. Poniżej przedstawiono dwie metody doboru próby punktów wyborczych.
+
+### Losowanie warstwowe z alokacją proporcjonalną
+
+W badaniach przeprowadzanych przez IPSOS dobór próby ma charakter warstwowo-proporcjonalny, przy czym warstwy definiowane są na podstawie skrzyżowania okręgu wyborczego i województwa z kategorią wielkości miejscowości oraz wielkością obwodu głosowania. IPSOS nie podaje jednak dokładnych zmiennych ani przedziałów, według których dokonywany jest szczegółowy podział.
+
+W obrębie każdej warstwy losowanie komisji przeprowadzane jest z prawdopodobieństwem proporcjonalnym do liczby wyborców przypisanych do danej komisji, co oznacza, że komisje obejmujące większą liczbę głosujących mają większą szansę znalezienia się w próbie. Takie podejście pozwala lepiej odwzorować rzeczywistą strukturę elektoratu i ograniczyć błąd wynikający z niedostatecznej reprezentacji dużych obwodów głosowania.
+
+W praktyce oznacza to, że w pierwszym kroku każda komisja zostaje przypisana do określonej warstwy. Na przykład komisja A może zostać zaklasyfikowana jako należąca do zbioru komisji zlokalizowanych w dużych miastach okręgu X, województwa Y, przy liczbie uprawnionych do głosowania mieszczącej się w przedziale od 1000 do 5000 osób. Następnie komisja ta zostaje objęta losowaniem z prawdopodobieństwem równym stosunkowi liczby przypisanych do niej wyborców do całkowitej liczby wyborców w danej warstwie.
+
+Aby na podstawie wyników z wybranych komisji oszacować wynik wyborów w skali kraju, konieczne jest obliczenie udziału każdej warstwy w całej populacji. Przykładowo, jeżeli dana warstwa stanowi 8% ogółu komisji wyborczych w kraju, to w próbie obejmującej 1000 lokali wyborczych, 80 z nich powinno pochodzić właśnie z tej warstwy.
+
+Losowanie warstwowe proporcjonalne, w porównaniu do losowania prostego, znacząco redukuje błąd oszacowania, szczególnie gdy zmienna użyta do podziału na warstwy jest silnie skorelowana z badaną cechą. W przypadku exit poll w Polsce korelacja ta jest wysoka (co potwierdzają m.in. analizy przestrzenne – np. mapy pokazujące podział polityczny kraju na bardziej „lewicowe” i „prawicowe” regiony), dzięki czemu warstwowanie istotnie poprawia reprezentatywność próby\supref{3}.
+
+Aby lepiej zrozumieć efekty stosowania takiego podejścia, wygenerowano symulowane dane dla 12 warstw społecznych, oznaczonych rzymskimi cyframi od I do XII. Dla każdej warstwy wygenerowano losowo udziały procentowe populacji (tzw. udział warstwowy) oraz poparcie dwóch kandydatów, A i B, które sumują się do 1. Na ich podstawie powstał wykres słupkowy obrazujący poparcie kandydatów w każdej warstwie oraz wykres kołowy pokazujący udział procentowy poszczególnych warstw w populacji.
+
+```{r}
+#| include: false 
+#| echo: false 
+library(reticulate)
+use_python("C:/Users/Oliwia/AppData/Local/Programs/Python/Python311/python.exe", required = TRUE)
+```
+
+```{python}
+#| label: fig-pmlos1
+#| fig-cap: "Wykres słupkowy przedstawiający poparcie kandydatów A i B w różnych warstwach społecznych, wygenerowany na podstawie symulowanych danych."
+#| echo: false
+#| fig.align: "center"
+#| warning: false
+#| message: false
+#| include: true
+#| fig.width: 6
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+my_random_seed = 7152
+
+np.random.seed(my_random_seed)
+
+# Warstwy rzymskimi cyframi
+layer_names = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
+n_layers = len(layer_names)
+
+# Dane: poparcie + struktura
+support_A = np.round(np.random.uniform(0.2, 0.8, n_layers), 2)
+support_B = 1 - support_A
+population_share = np.round(np.random.dirichlet(np.ones(n_layers), size=1).flatten(), 3)
+
+# DataFrame
+layer_df = pd.DataFrame({
+    'Warstwa': layer_names,
+    'Poparcie_A': support_A,
+    'Poparcie_B': support_B,
+    'Udział': population_share
+})
+
+# Pastelowe kolory
+color_A = '#F7C6C7'  # pastelowy róż
+color_B = '#AEC6CF'  # pastelowy niebieski
+pie_colors = plt.cm.Pastel1(np.linspace(0, 1, n_layers))
+
+# === WYKRES SŁUPKOWY ===
+plt.figure(figsize=(6, 4))
+bars_A = plt.bar(layer_df['Warstwa'], layer_df['Poparcie_A'], color=color_A, label='Kandydat A')
+bars_B = plt.bar(layer_df['Warstwa'], layer_df['Poparcie_B'], bottom=layer_df['Poparcie_A'], color=color_B, label='Kandydat B')
+
+# Etykiety na słupkach
+for bar, value in zip(bars_A, support_A):
+    plt.text(bar.get_x() + bar.get_width()/2, value / 2, f"{value:.2f}", ha='center', va='center', color='black', fontsize=9)
+
+for bar, val_a, val_b in zip(bars_B, support_A, support_B):
+    plt.text(bar.get_x() + bar.get_width()/2, val_a + val_b / 2, f"{val_b:.2f}", ha='center', va='center', color='black', fontsize=9)
+
+plt.title("Poparcie kandydatów A i B\nw wysymulowanych warstwach społecznych", fontsize=12, y=1.1)
+plt.ylabel("Udział procentowy")
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.legend()
+plt.tight_layout()
+plt.show()
+```
+
+Dane symulowane w przykładzie zostały wygenerowane w następujący sposób: poparcie dla kandydata A zostało losowo wylosowane z rozkładu jednostajnego na przedziale od 0.2 do 0.8, co oznacza, że wartości poparcia mieszczą się między 20% a 80% dla każdej z 12 warstw społecznych. Poparcie kandydata B obliczono jako dopełnienie do 1, zakładając, że poparcie obu kandydatów sumuje się do 100%. Natomiast udziały procentowe poszczególnych warstw w populacji zostały wygenerowane z rozkładu Dirichleta, który umożliwia stworzenie losowego wektora udziałów sumujących się do 1, co dobrze symuluje rozkład struktury populacji między warstwami.
+
+Dla przedstawionych danych wygenerowano następnie próbki o coraz większej wielkości, aby przeanalizować, jak zmienia się dokładność oszacowań przy zastosowaniu losowania warstwowego w porównaniu do losowania prostego. Dzięki temu można ocenić, w jakim stopniu uwzględnienie struktury warstwowej populacji wpływa na zmniejszenie błędu estymacji oraz poprawę reprezentatywności próby w różnych scenariuszach rozmiaru próby. Założono wielkość populacji równą milionowi obywateli i przebadano próbki wielkości 500, 1000, 5000, 10000, 15000 i 20000. Dla każdej wielkości próbki przeprowadzono 100 symulacji i obliczono średni błąd bezwzględny między oczekiwanym wynikiem (obliczonym na podstawie poparcia kandydatów w poszczególnych warstwach i rozkładu warstw w społeczeństwie). Tak uzyskane wyniki zaprezentowane przedstawiono w Tabeli 1.
+
+```{python}
+#| label: fig-pmlos2
+#| fig-cap: "Wykres kołowy przedstawiający strukturę społeczeństwa według warstw społecznych na podstawie udziału procentowego dla wysymulowanych danych."
+#| echo: false
+#| warning: false
+#| message: false
+#| include: true
+
+# === WYKRES KOŁOWY ===
+plt.figure(figsize=(4, 4))
+labels_with_values = [f"{name} ({share*100:.1f}%)" for name, share in zip(layer_df['Warstwa'], layer_df['Udział'])]
+
+_ = plt.pie(layer_df['Udział'],
+            labels=labels_with_values,
+            colors=pie_colors,
+            startangle=140,
+            wedgeprops=dict(edgecolor='white'),
+            textprops={'fontsize': 9},
+            labeldistance=1.1)
+
+_ = plt.title("Struktura społeczeństwa według warstw", fontsize=12, y=1.05)
+plt.show()
+None
+```
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+import numpy as np
+import pandas as pd
+
+np.random.seed(my_random_seed)
+
+# --- Definicje parametrów ---
+total_population = 1_000_000
+sample_sizes = [500, 1_000, 5_000, 10_000, 15_000, 20_000]
+n_simulations = 100
+
+# Udziały i poparcie w warstwach - zakładamy, że masz te zmienne zdefiniowane wcześniej
+# population_share, support_A
+
+# Liczba osób w każdej warstwie
+population_counts = (population_share * total_population).astype(int)
+
+# Poparcie oczekiwane w populacji
+expected_support_A = np.sum(population_share * support_A)
+
+# Generujemy populację raz
+population_votes = []
+for i, count in enumerate(population_counts):
+    votes = np.random.binomial(1, support_A[i], size=count)
+    population_votes.extend(votes)
+population_votes = np.array(population_votes)
+
+# Listy do przechowywania wyników
+results = []
+
+for sample_size in sample_sizes:
+    sample_sizes_layered = np.round(population_share * sample_size).astype(int)
+    
+    errors_layered = []
+    errors_simple = []
+    
+    for _ in range(n_simulations):
+        # Losowanie warstwowe
+        sampled_votes_A = []
+        for i, n in enumerate(sample_sizes_layered):
+            votes = np.random.binomial(1, support_A[i], size=n)
+            sampled_votes_A.append(votes.sum())
+        poparcie_A_layered = sum(sampled_votes_A) / sample_size
+        
+        # Losowanie proste
+        sample_indices = np.random.choice(len(population_votes), size=sample_size, replace=False)
+        sample_votes = population_votes[sample_indices]
+        poparcie_A_simple = sample_votes.mean()
+        
+        # Błędy bezwzględne
+        errors_layered.append(abs(poparcie_A_layered - expected_support_A))
+        errors_simple.append(abs(poparcie_A_simple - expected_support_A))
+    
+    results.append({
+        "Sample_Size": sample_size,
+        "Mean_Error_Layered": np.mean(errors_layered),
+        "Mean_Error_Simple": np.mean(errors_simple)
+    })
+
+# Tworzymy jeden DataFrame
+df_results = pd.DataFrame(results)
+None
+```
+
+```{r tab-pmlos1, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+
+df_results <- py$df_results
+# Zamiana Sample_Size na integer (bez zer po przecinku)
+df_results$Sample_Size <- as.integer(df_results$Sample_Size)
+
+# Zmiana nazw kolumn na polskie
+colnames(df_results) <- c("Rozmiar próby", 
+                          "Losowanie warstwowe", 
+                          "Losowanie proste")
+
+kbl(df_results, 
+    caption = "Tabela przedstawiająca średni błąd bezwzględny dla losowania prostego i warstwowego dla wysymulowanych danych",
+    booktabs = TRUE, 
+    align = "rccc",  # pierwsza kolumna prawdopodobnie liczby całkowite, reszta zera po przecinku
+    row.names = FALSE) %>%
+  add_header_above(c(" " = 1, "Średni błąd bezwzględny" = 2)) %>%
+  kable_styling(position = "center", latex_options = c("hold_position", "striped"))
+
+```
+
+Średni błąd bezwzględny jest systematycznie mniejszy w przypadku losowania warstwowego w porównaniu do losowania prostego, co świadczy o wyższej precyzji tej metody. Wraz ze wzrostem wielkości próby oba błędy maleją, jednak przewaga losowania warstwowego w większości przypadków zostaje utrzymana. Oznacza to, że uwzględnienie struktury warstwowej populacji znacząco poprawia jakość estymacji, zwłaszcza przy mniejszych próbach.
+
+### Próbkowanie związane
+
+Inną techniką doboru próby lokali wyborczych, w których odbywać się będzie *exit poll* jest próbkowanie związane (z ang. *tied sampling*). Wykorzystuje ona dane z poprzednich wyników wyborów. Podstawą do stworzenia prognozy wyborczej jest próbka obwodów wyborczych, które okazały się najbardziej reprezentatywne podczas poprzednich wyborów.\supref{7}
+
+Inspirując się metodologią zaproponowaną przez dra Arkadiusza Kozłowskiego w jego artykule, w niniejszej pracy, wykorzystując dane wyborcze udostępnione przez Państwową Komisję Wyborczą (PKW), przeprowadzimy analizę próbkowania związanego. Na podstawie historycznych wyników wyborów wybierzemy próbki obwodów wyborczych, które były najbardziej reprezentatywne, aby następnie ocenić ich skuteczność w prognozowaniu wyników kolejnych wyborów.
+
+W tym celu pobraliśmy dane z pierwszej tury wyborów prezydenckich 2020, udostępnione przez Państwową Komisję Wyborczą\supref{8}. Dane zawierają wyniki głosowania z podziałem na obwody wyborcze, w tym liczbę głosów oddanych na kandydatów oraz wielkość każdego obwodu. Ta informacja pozwala na wyliczenie metryki Average Manhattan Distance (AMD), która służy do oceny podobieństwa wyników wyborczych w obwodach, a następnie na wybór najbardziej reprezentatywnej próbki obwodów do dalszej analizy.
+
+$$
+\mathrm{AMD}_i = \frac{1}{n} \sum_{j=1}^{n}| p_{ij} - P_j |\cdot100\%
+$$
+
+gdzie:
+
+\begin{itemize}
+    \item $\mathrm{AMD}_i$ — miara odległości dla \(i\)-tej próbki (obwodu wyborczego),
+    \item $p_{ij}$ — względny wynik (udział procentowy) \(j\)-tego kandydata/komitetu w \(i\)-tej próbce,
+    \item $P_j$ — względny wynik (udział procentowy) \(j\)-tego kandydata/komitetu w całej populacji (kraju),
+    \item $n$ — liczba kandydatów/komitetów.
+\end{itemize}
+
+Wartość $\mathrm{AMD}_i$ określa, jak bardzo wyniki danego obwodu różnią się od wyników ogólnokrajowych. Obwody o najmniejszej wartości AMD uznaje się za najbardziej reprezentatywne.
+
+W celu zaprezentowania metody próbkowania związanego zdecydowano się eksperymentalnie sprawdzić, jak wpływa ono na efektywność techniki doboru próby w porównaniu do prostego losowego doboru próby. W tym celu zaprojektowano następującą symulację, powtarzając procedurę opisaną w artykule dra Arkadiusza Kozłowskiego, w której oceniał on efektywność próby dobranej na podstawie wyborów parlamentarnych do Sejmu w 2007 roku w odniesieniu do wyborów prezydenckich w 2010 roku:
+
+-   Wylosowano $m$ niezależnych próbek (bez zwracania),
+-   Spośród tych $m$ próbek wybrano tę, która miała najmniejszą wartość miary AMD dla wyborów prezydenckich w 2015 roku,
+-   Dla wybranej próbki obliczono wartość AMD w odniesieniu do wyników wyborów prezydenckich w 2020 roku,
+-   Kroki 1-3 powtórzono tysiąc razy dla pięciu różnych wartości parametru $m$.
+
+W tabeli przedstawiono wyniki przeprowadzonej symulacji, czyli podstawowe statystyki opisowe rozkładu tysiąca wartości miary AMD względem wyników wyborów prezydenckich z 2020 roku, dla różnych wartości parametru $m$. Przypadek, gdy $m=1$ odpowiada prostemu losowemu doborowi próby, natomiast wyższe wartości $m$ ilustrują efekty próbkowania związanego, polegającego na wyborze spośród kilku próbek tej najbardziej reprezentatywnej względem wyników z 2015 roku.
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+import pandas as pd
+import numpy as np
+
+# Wczytanie danych
+df_2015 = pd.read_csv("dane/prezydent_2015_tura1.csv", sep=';', encoding='windows-1250')
+df_2020 = pd.read_csv("dane/wyniki_2020.csv", sep=';', encoding='utf-8', low_memory=False)
+
+# Kandydaci 2015 i 2020
+candidates_2015 = ["Grzegorz Michał Braun", "Andrzej Sebastian Duda", "Adam Sebastian Jarubas", 
+                  "Bronisław Maria Komorowski", "Janusz Ryszard Korwin-Mikke", "Marian Janusz Kowalski", 
+                  "Paweł Piotr Kukiz", "Magdalena Agnieszka Ogórek", "Janusz Marian Palikot", 
+                  "Paweł Jan Tanajno", "Jacek Wilk"]
+
+candidates_2020 = ["Robert BIEDROŃ", "Krzysztof BOSAK", "Andrzej Sebastian DUDA",
+                  "Szymon Franciszek HOŁOWNIA", "Marek JAKUBIAK",
+                  "Władysław Marcin KOSINIAK-KAMYSZ", "Mirosław Mariusz PIOTROWSKI",
+                  "Paweł Jan TANAJNO", "Rafał Kazimierz TRZASKOWSKI",
+                  "Waldemar Włodzimierz WITKOWSKI", "Stanisław Józef ŻÓŁTEK"]
+
+# Przygotowanie kolumn do identyfikacji obwodów
+df_2015['obwod_id'] = list(zip(df_2015['TERYT gminy'], df_2015['Numer obwodu']))
+df_2020['obwod_id'] = list(zip(df_2020['Kod TERYT'], df_2020['Numer obwodu']))
+
+# Zamiana "-" na NaN i konwersja do liczby (2020)
+for cand in candidates_2020:
+    df_2020[cand] = df_2020[cand].replace("-", np.nan)
+    df_2020[cand] = pd.to_numeric(df_2020[cand], errors='coerce')
+df_2020[candidates_2020] = df_2020[candidates_2020].fillna(0)
+
+# Konwersja na liczby (2015)
+for col in candidates_2015 + ["Liczba kart ważnych"]:
+    df_2015[col] = pd.to_numeric(df_2015[col], errors='coerce')
+
+# Konwersja na liczby (2020)
+for col in candidates_2020 + ["Liczba głosów ważnych oddanych łącznie na wszystkich kandydatów"]:
+    df_2020[col] = pd.to_numeric(df_2020[col], errors='coerce')
+
+# Filtrowanie wierszy z wartościami > 0
+df_2015 = df_2015[df_2015["Liczba kart ważnych"] > 0].dropna(subset=candidates_2015 + ["Liczba kart ważnych"]).copy()
+df_2020 = df_2020[df_2020["Liczba głosów ważnych oddanych łącznie na wszystkich kandydatów"] > 0].dropna(subset=candidates_2020 + ["Liczba głosów ważnych oddanych łącznie na wszystkich kandydatów"]).copy()
+
+# Normalizacja do udziału procentowego
+df_2015[candidates_2015] = df_2015[candidates_2015].div(df_2015["Liczba kart ważnych"], axis=0)
+df_2020[candidates_2020] = df_2020[candidates_2020].div(df_2020["Liczba głosów ważnych oddanych łącznie na wszystkich kandydatów"], axis=0)
+
+# Wspólne obwody w obu datasetach
+common_obwody = set(df_2015['obwod_id']).intersection(set(df_2020['obwod_id']))
+
+# Filtrujemy tylko wspólne obwody
+df_2015_common = df_2015[df_2015['obwod_id'].isin(common_obwody)].copy()
+df_2020_common = df_2020[df_2020['obwod_id'].isin(common_obwody)].copy()
+
+# Sortujemy po obwod_id, żeby zachować spójność indeksów
+df_2015_common = df_2015_common.sort_values('obwod_id').reset_index(drop=True)
+df_2020_common = df_2020_common.sort_values('obwod_id').reset_index(drop=True)
+
+# Wartości referencyjne P
+weights_2015 = df_2015_common["Liczba kart ważnych"]
+P_2015 = (df_2015_common[candidates_2015].multiply(weights_2015, axis=0).sum()) / weights_2015.sum()
+P_2015 = P_2015.values
+
+weights_2020 = df_2020_common["Liczba głosów ważnych oddanych łącznie na wszystkich kandydatów"]
+P_2020 = (df_2020_common[candidates_2020].multiply(weights_2020, axis=0).sum()) / weights_2020.sum()
+P_2020 = P_2020.values
+
+def calculate_amd(sample_df, P, candidates):
+    p_i = sample_df[candidates].mean(axis=0).values
+    amd = np.sum(np.abs(p_i - P)) / len(P)
+    return amd
+
+def tied_sampling(df_2015, df_2020, m, sample_size, n_iterations=1000):
+    n = len(df_2015)
+    amd_results_2015 = []
+    amd_results_2020 = []
+    
+    for _ in range(n_iterations):
+        # Losujemy wspólne indeksy, bo obie ramki mają te same obwody w tej samej kolejności
+        sample_idx = np.random.choice(n, size=sample_size, replace=False)
+        
+        for __ in range(m):
+            sample_2015 = df_2015.iloc[sample_idx]
+            sample_2020 = df_2020.iloc[sample_idx]
+            
+            amd_2015 = calculate_amd(sample_2015, P_2015, candidates_2015)
+            amd_2020 = calculate_amd(sample_2020, P_2020, candidates_2020)
+            
+            amd_results_2015.append(amd_2015)
+            amd_results_2020.append(amd_2020)
+    
+    return amd_results_2015, amd_results_2020
+
+# Parametry
+sample_size = 100
+m_values = [1, 5, 10]
+
+results = {}
+
+for m in m_values:
+    n = len(df_2015_common)
+    amd_2015_selected = []
+    amd_2020_selected = []
+    
+    for _ in range(1000):  # 1000 iteracji
+        # 1. Wylosowanie m niezależnych próbek (bez zwracania)
+        samples_idx = [np.random.choice(n, size=sample_size, replace=False) for __ in range(m)]
+        
+        # 2. Spośród tych m próbek wybieramy próbkę z najmniejszą wartością AMD w 2015
+        amd_2015_values = [calculate_amd(df_2015_common.iloc[idx], P_2015, candidates_2015) for idx in samples_idx]
+        best_sample_idx = samples_idx[np.argmin(amd_2015_values)]
+        
+        # 3. Obliczamy AMD dla wybranej próbki w odniesieniu do danych 2020
+        amd_2015_selected.append(calculate_amd(df_2015_common.iloc[best_sample_idx], P_2015, candidates_2015))
+        amd_2020_selected.append(calculate_amd(df_2020_common.iloc[best_sample_idx], P_2020, candidates_2020))
+    
+    # 4. Zapisujemy średnie i mediany dla 1000 powtórzeń
+    results[m] = {
+        "Średnia AMD 2015": np.mean(amd_2015_selected),
+        "Mediana AMD 2015": np.median(amd_2015_selected),
+        "Średnia AMD 2020": np.mean(amd_2020_selected),
+        "Mediana AMD 2020": np.median(amd_2020_selected)
+    }
+
+```
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+# Przygotowanie DataFrame z wynikami
+df_results = pd.DataFrame([
+    {
+        "Rozmiar próby": sample_size,
+        "m": m,
+        "Średnia AMD 2015": stats["Średnia AMD 2015"],
+        "Mediana AMD 2015": stats["Mediana AMD 2015"],
+        "Średnia AMD 2020": stats["Średnia AMD 2020"],
+        "Mediana AMD 2020": stats["Mediana AMD 2020"]
+    }
+    for m, stats in results.items()
+])
+```
+
+```{r tab-pmpro1, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+
+df_results <- py$df_results
+df_results$m <- as.integer(df_results$m)
+df_results$`Rozmiar próby` <- as.integer(df_results$`Rozmiar próby`)
+
+# Zamiana nazw kolumn na polskie i uproszczenie
+colnames(df_results) <- c("Rozmiar próby", "m", "Średnia AMD 2015", "Mediana AMD 2015", "Średnia AMD 2020", "Mediana AMD 2020")
+
+kbl(df_results[, c("m", "Średnia AMD 2015", "Mediana AMD 2015", "Średnia AMD 2020", "Mediana AMD 2020")], 
+    caption = "Tabela przedstawiająca średnią i medianę AMD dla różnych wartości parametru m",
+    booktabs = TRUE, 
+    align = "rcccc",
+    row.names = FALSE) %>%
+  add_header_above(c(" " = 1, "AMD dla wyborów 2015 i 2020" = 4)) %>%
+  kable_styling(position = "center", latex_options = c("hold_position", "striped"))
+```
+
+Przeprowadzona symulacja potwierdza, że próbkowanie związane (tied sampling), oparte na wyborze próbki obwodów z minimalną wartością Average Manhattan Distance (AMD) względem poprzednich wyborów, znacząco poprawia reprezentatywność doboru próby w porównaniu do losowego wyboru. Zwiększanie liczby losowanych próbek $m$ pozwala na znalezienie bardziej reprezentatywnej próbki, co przekłada się na niższy błąd estymacji wyników zarówno dla wyborów w 2015, jak i 2020 roku. Największe korzyści obserwuje się przy wzroście $m$ z 1 do 5, po czym dalsze zwiększanie tej liczby daje już mniejszą poprawę.
+
+W praktyce oznacza to, że wykorzystanie historycznych danych wyborczych do wyboru próbek o minimalnej odległości AMD jest efektywną metodą doboru lokalizacji do badań exit poll. Obwody, które najlepiej reprezentowały wyniki wcześniejszych wyborów, wykazują też stabilność w kolejnych wyborach, co pozwala na bardziej precyzyjne prognozy wyborcze i lepsze wykorzystanie ograniczonych zasobów badawczych. Metoda ta może więc istotnie zwiększyć wiarygodność i efektywność badań opinii wyborczych.
+
+W dalszej części analizy dr Kozłowski przeprowadził rozszerzoną symulację, generując bardzo dużą liczbę próbek (nawet do miliona) i badając efekty wyboru spośród nich tych o najmniejszej wartości AMD z poprzednich wyborów. Zauważył, że choć jakość próbek generalnie się poprawia, dalsze zwiększanie liczby próbek ponad kilka tysięcy przynosi coraz mniejsze korzyści. Co więcej, wybór jednej próbki o minimalnym AMD nie zawsze gwarantuje najlepszą reprezentatywność w kolejnych wyborach. Na tej podstawie zasugerował modyfikację procedury polegającą na losowym wyborze próbki spośród kilkuset najlepszych pod względem AMD, co może poprawić stabilność i trafność doboru próby w praktyce.
+
+## Wybór respondentów - próba losowa systematyczna
+
+Drugi stopień schematu losowania w badaniach exit poll dotyczy wyboru respondentów w uprzednio wybranych obwodach wyborczych. Po wytypowaniu punktów, ankieterzy przeprowadzają wywiady z wyborcami wychodzącymi z lokalu, zazwyczaj stosując próbę systematyczną — na przykład zapraszając do udziału co trzeciego lub co piątego wyborcę. Przykładowo, podczas wyborów prezydenckich w 2020 roku firma Ipsos na zlecenie TVN, Polsatu i TVP zaangażowała około 1050 ankieterów, którzy w 500 losowo wybranych obwodach przeprowadzili około 50 tysięcy wywiadów, średnio z co dziesiątym wyborcą opuszczającym lokal wyborczy.\supref{1}
+
+Zastosowanie próby systematycznej w takim kontekście pozwala ograniczyć ryzyko błędów wynikających z ukrytych regularności w zachowaniach wyborców. Dzięki losowości momentu rozpoczęcia liczenia i stałemu odstępowi między kolejnymi respondentami, minimalizowane jest prawdopodobieństwo uchwycenia grupy osób głosujących razem, np. członków jednej rodziny lub zwolenników konkretnego kandydata, którzy przyszli wspólnie. Dodatkowo metoda ta zmniejsza wpływ ewentualnych związków między godziną głosowania a preferencjami politycznymi — np. jeśli wyborcy konkretnego ugrupowania częściej głosują rano, systematyczne dobieranie respondentów w ciągu całego dnia zmniejsza ryzyko przeszacowania ich poparcia.
+
+Stosowanie systematycznego doboru respondentów może jednak prowadzić do niedoszacowania niektórych wyników w sytuacji, gdy nie uwzględnia się zróżnicowanej wielkości lokali wyborczych. W przypadku małych komisji wyborczych, gdzie liczba głosujących jest ograniczona, zapraszanie do badania co dziesiątej osoby może skutkować bardzo małą próbą, co przekłada się na niską precyzję wyników. Szczególnie widoczne jest to w sytuacjach, gdy frekwencja jest umiarkowana, a liczba kandydatów stosunkowo duża — wówczas nawet niewielkie różnice w liczbie respondentów mogą decydować o tym, czy mniej popularni kandydaci zostaną w ogóle odnotowani w badaniu.
+
+Z tego powodu w praktyce badawczej niekiedy stosuje się podejście nieproporcjonalne — zwiększając częstotliwość doboru respondentów w mniejszych lokalach, by zapewnić porównywalną liczebność próby w każdej komisji objętej badaniem. Takie rozwiązanie przyjął m.in. TNS OBOP podczas wyborów prezydenckich w 2010 roku, zapraszając częściej do udziału wyborców w małych komisjach niż w dużych. Choć wiąże się to z odejściem od proporcjonalności warstwowej, pozwala uniknąć problemu zbyt małej próby w lokalach o niskiej liczbie uprawnionych do głosowania, a tym samym zwiększa stabilność i porównywalność danych pochodzących z różnych punktów badania.
+
+Kontrastem dla tego podejścia są wyniki badania przeprowadzonego podczas tych samych wyborów przez firmę MB SMG/KRC, które – mimo zastosowania metody *exit poll* – wykazały niemal dwupunktowe odchylenie względem oficjalnych danych PKW. Jedną z głównych przyczyn tej rozbieżności mogło być stosowanie przez ankieterów licznika o stałym skoku, niezależnie od wielkości lokalu wyborczego \supref{3}.
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+import pandas as pd
+import numpy as np
+
+# Wczytanie danych 2015
+df_2015 = pd.read_csv("dane/prezydent_2015_tura1.csv", sep=';', encoding='windows-1250')
+
+# Kandydaci 2015
+candidates_2015 = ["Grzegorz Michał Braun", "Andrzej Sebastian Duda", "Adam Sebastian Jarubas", 
+                  "Bronisław Maria Komorowski", "Janusz Ryszard Korwin-Mikke", "Marian Janusz Kowalski", 
+                  "Paweł Piotr Kukiz", "Magdalena Agnieszka Ogórek", "Janusz Marian Palikot", 
+                  "Paweł Jan Tanajno", "Jacek Wilk"]
+
+# Przygotowanie identyfikatorów obwodów
+df_2015['obwod_id'] = list(zip(df_2015['TERYT gminy'], df_2015['Numer obwodu']))
+
+# Konwersja na liczby
+for col in candidates_2015 + ["Liczba kart ważnych"]:
+    df_2015[col] = pd.to_numeric(df_2015[col], errors='coerce')
+
+# Filtrowanie tylko obwodów z >0 ważnymi kartami
+df_2015 = df_2015[df_2015["Liczba kart ważnych"] > 0].dropna(subset=candidates_2015 + ["Liczba kart ważnych"]).copy()
+
+# Normalizacja do udziałów procentowych
+df_2015[candidates_2015] = df_2015[candidates_2015].div(df_2015["Liczba kart ważnych"], axis=0)
+
+# Wartości referencyjne (cała populacja)
+weights_2015 = df_2015["Liczba kart ważnych"]
+P_2015 = (df_2015[candidates_2015].multiply(weights_2015, axis=0).sum()) / weights_2015.sum()
+P_2015 = P_2015.values
+
+def calculate_amd(sample_df, P, candidates):
+    p_i = sample_df[candidates].mean(axis=0).values
+    amd = np.sum(np.abs(p_i - P)) / len(P)
+    return amd
+
+def run_simulation(df, P, candidates, sample_size=100, n_iter=1000):
+    n = len(df)
+    amd_values = []
+    for _ in range(n_iter):
+        sample_idx = np.random.choice(n, size=sample_size, replace=False)
+        sample_df = df.iloc[sample_idx]
+        amd = calculate_amd(sample_df, P, candidates)
+        amd_values.append(amd)
+    return np.mean(amd_values), np.median(amd_values)
+
+# Progi wielkości obwodów do testowania
+thresholds = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+
+results = []
+
+for k in thresholds:
+    # Filtrujemy obwody z Liczba kart ważnych >= k
+    filtered_df = df_2015[df_2015["Liczba kart ważnych"] >= k]
+    
+    # Jeśli próbka jest większa niż liczba dostępnych obwodów, zmniejszamy sample_size
+    current_sample_size = min(100, len(filtered_df))
+    
+    mean_amd, median_amd = run_simulation(filtered_df, P_2015, candidates_2015, sample_size=current_sample_size)
+    results.append({
+        "k (min liczba wyborców)": k,
+        "Średnie AMD": mean_amd,
+        "Mediana AMD": median_amd
+    })
+
+# Konwersja do DataFrame i wyświetlenie
+df_results = pd.DataFrame(results)
+
+```
+
+```{r tab-pwyb1, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+
+df_results <- py$df_results
+df_results$`k (min liczba wyborców)` <- as.integer(df_results$`k (min liczba wyborców)`)
+
+# Nazwy kolumn po polsku i uproszczenie
+colnames(df_results) <- c("Próg liczby wyborców", "Średnie AMD", "Mediana AMD")
+
+# Generowanie tabeli
+kbl(df_results,
+    caption = "Wpływ pomijania najmniejszych obwodów na średnią i medianę AMD",
+    booktabs = TRUE,
+    align = c("r", "c", "c"),
+    row.names = FALSE) %>%
+  kable_styling(position = "center", latex_options = c("hold_position", "striped"))
+```
+
+Co istotne, zwiększenie częstotliwości doboru respondentów w mniejszych lokalach nie musi wiązać się ze wzrostem kosztów badania. Niewielkie komisje obsługiwane są zazwyczaj przez pojedynczego ankietera, którego czas pracy pozostaje taki sam niezależnie od liczby przeprowadzanych wywiadów. Dzięki temu możliwe jest zwiększenie liczebności próby tam, gdzie naturalnie byłaby ona najmniejsza, bez konieczności angażowania dodatkowych zasobów. Należy jednak pamiętać, że przy takim podejściu uzyskane wyniki muszą być odpowiednio przeliczone – udziały głosów przypisywane poszczególnym kandydatom w poszczególnych komisjach powinny być ważone zgodnie z relacją liczby uprawnionych do głosowania w danym obwodzie do całej populacji wyborców objętej badaniem. Tylko wtedy końcowy wynik badania zachowa swoją reprezentatywność w skali ogólnopolskiej.
+
+Innym rozwiązaniem dotyczącym najmniejszych obwodów, analizowanym m.in. przez dra Kuźmę\supref{3} jest ich celowe pominięcie w procedurze próbkowania. Takie zachowanie z punktu widzenia instytucji badawczej jest dopuszczalne ze względu na korzyści finansowe, ponieważ przy badaniu mniejszej liczby dużych obwodów, tę samą próbę respondentów można uzyskać przy niższych kosztach. Oczywiste jest, że celowe wykluczenie niektórych jednostek z populacji próby wpływa na szacunki. Jednakże tę usterkę można wyeliminować, jeśli zastosuje się procedurę próbkowania związanego, ponieważ próba jest wybierana w taki sposób, że odzwierciedla ona wynik całkowity, który obejmuje również obwody pominięte w próbkowaniu.
+
+Aby zweryfikować wpływ pomijania najmniejszych obwodów na jakość szacunków, przeprowadzimy symulację, w której kolejno wykluczymy obwody o liczbie uprawnionych do głosowania poniżej określonych progów. Następnie porównamy odchylenie średnie (AMD) uzyskanych próbek od rzeczywistych wyników wyborów z 2015 roku. Wyniki przeprowadzonej analizy zostały przedstawione w Tabeli 3.
+
+Wyniki symulacji wskazują, że pomijanie najmniejszych obwodów do około 400 uprawnionych do głosowania może nawet poprawić reprezentatywność próby, zmniejszając błąd średni absolutny (AMD). Jednak dalsze podnoszenie progu skutkuje znacznym wzrostem błędu, co świadczy o utracie istotnej informacji i obniżeniu jakości szacunków. Takie zjawisko może wynikać z tego, że bardzo małe obwody często generują większą zmienność i niestabilność wyników, przez co ich wykluczenie zmniejsza szum statystyczny w próbie. Natomiast zbyt wysokie progi powodują eliminację zbyt dużej części populacji wyborców, co prowadzi do utraty reprezentatywności i w konsekwencji wzrostu błędu szacunków.'
+
+## Imputacja brakujących odpowiedzi
+
+Jak wspomniano we wstępie, w badaniach *exit poll* jednym z istotnych problemów jest tzw. błąd nieodpowiedzi, wynikający z odmowy udziału niektórych wyborców w ankiecie. Odmowa ta często nie jest przypadkowa, lecz związana z określonymi cechami respondentów, takimi jak wiek, preferencje polityczne czy poziom zaangażowania. Przekłada się to na obciążenia próby, która staje się mniej reprezentatywna i w efekcie może zniekształcać prognozy wyborcze. Aby ograniczyć skutki takich braków danych i poprawić wiarygodność estymacji, stosuje się metody imputacji brakujących odpowiedzi, które pozwalają na uzupełnienie próby o brakujące dane na podstawie informacji z dostępnych odpowiedzi oraz cech respondentów.
+
+Przykładowymi metodami imputacji brakujących odpowiedzi mogą być:
+
+-   Imputacja prosta (mediana/moda/średnia) - najprostsza metoda polegająca na uzupełnieniu brakujących odpowiedzi poprzez przypisanie najczęściej występującej kategorii (mody) lub rozdzielenie braków proporcjonalnie do rozkładu głosów wśród respondentów z podobnych cech. Metoda ta jest szybka i łatwa do zastosowania, ale może nie uwzględniać złożonych zależności między zmiennymi oraz prowadzić do zaniżenia różnorodności odpowiedzi.
+
+-   Imputacja warstwowa (stratyfikowana) – metoda polegająca na podziale próby na homogeniczne grupy (warstwy) według kluczowych cech demograficznych, a następnie imputacji brakujących odpowiedzi proporcjonalnie do rozkładu wartości w danej warstwie. Dzięki temu można zachować strukturę danych i lepiej uwzględnić heterogeniczność próby, co poprawia trafność estymacji.
+
+-   Regresja logistyczna - metoda imputacji brakujących odpowiedzi polegająca na przewidywaniu prawdopodobieństwa wystąpienia danej kategorii (np. wyboru konkretnego kandydata) na podstawie dostępnych cech respondentów (np. demograficznych). Dzięki temu możliwe jest uzupełnienie brakujących danych w sposób uwzględniający zależności między zmiennymi oraz poprawiający reprezentatywność próby.
+
+-   Imputacja za pomocą drzewa decyzyjnego - metoda polegająca na wykorzystaniu modelu drzewa decyzyjnego do przewidywania brakujących odpowiedzi na podstawie dostępnych cech respondentów, takich jak wiek, płeć czy lokalizacja. Drzewo decyzyjne dzieli dane na podgrupy według wartości zmiennych objaśniających i na ich podstawie przypisuje najbardziej prawdopodobną wartość brakującej odpowiedzi. Ta metoda potrafi wychwycić nieliniowe zależności i interakcje między cechami, dzięki czemu jest skuteczniejsza niż proste metody imputacji, choć wymaga większej liczby danych i obliczeń.
+
+## Analiza powiązań cech demograficznych z oddanym głosem
+
+Analiza powiązań między cechami demograficznymi respondentów a ich preferencjami wyborczymi stanowi jeden z kluczowych elementów badań exit poll. Pozwala ona na identyfikację istotnych zależności, które mogą wyjaśniać wzorce głosowania oraz ułatwiać profilowanie elektoratu poszczególnych kandydatów czy ugrupowań politycznych. Zrozumienie tych relacji jest istotne zarówno z punktu widzenia nauk społecznych, jak i praktycznych zastosowań, takich jak poprawa jakości prognoz wyborczych czy projektowanie kampanii wyborczych.
+
+Do badania takich zależności wykorzystuje się różnorodne metody statystyczne, które pozwalają ocenić siłę i kierunek powiązań oraz testować hipotezy dotyczące wpływu poszczególnych zmiennych demograficznych na wybór kandydata. Wśród najczęściej stosowanych narzędzi wymienić można:
+
+-   Analizę tabel kontyngencji oraz testy niezależności (np. test chi-kwadrat), które umożliwiają sprawdzenie, czy rozkład głosów różni się istotnie między grupami określonymi przez cechy demograficzne, takie jak płeć, wiek czy miejsce zamieszkania. Pozwala to na wykrycie zależności nominalnych i porównanie rozkładów częstości.
+
+-   Analizę regresji logistycznej, służącą do modelowania prawdopodobieństwa oddania głosu na konkretnego kandydata w zależności od wielu zmiennych jednocześnie. Metoda ta pozwala ocenić indywidualny wpływ każdej cechy demograficznej na decyzję wyborczą, kontrolując przy tym efekt pozostałych czynników.
+
+-   Metody wizualizacji danych, takie jak wykresy słupkowe, wykresy rozkładów czy mapy cieplne, które pomagają w intuicyjnym zrozumieniu rozkładów głosów w różnych grupach oraz w identyfikacji wzorców i anomalii.
+
+Przeprowadzenie rzetelnej analizy powiązań demograficznych z preferencjami wyborczymi wymaga odpowiedniej jakości danych oraz uwzględnienia potencjalnych źródeł błędów, takich jak brak odpowiedzi, stronniczość próby czy zmienne zakłócające.
+
+IPSOS oraz inne firmy odpowiedzialne za przeprowadzanie badań typu *exit poll* udostępniają przekształcone dane przedstawiające estymowany rozkład oddanych głosów w zależności od cech taki jak płeć czy wykształcenie, jednak nie podają surowych danych, z których można byłoby skorzystać do przeprowadzenia wnikliwej analizy.
+
+Wobec tego, aby mimo ograniczeń danych móc przeprowadzić analizę siły powiązań między cechami demograficznymi a preferencjami wyborczymi, wykorzystać można miary takie jak różnica proporcji, ryzyko względne czy iloraz szans. Te statystyki pozwalają na ocenę relacji między kategoriami zmiennych na podstawie dostępnych danych procentowych, co stanowi wartościowe narzędzie analityczne w sytuacji braku dostępu do danych surowych.
+
+Przykładowo, w wyborach prezydenckich w 2025 roku głosy oddane na Rafała Trzaskowkiego i Karola Nawrockiego w grupie kobiet i mężczyzn podczas badania *exit poll* przeprowadzanego rpzez firmę IPSOS prezentowały się następująco\supref{9}:
+
+```{r tab-pana1, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+
+# Dane procentowe
+df_procenty <- data.frame(
+  Płeć = c("Kobiety", "Mężczyźni"),
+  `Rafał Trzaskowski` = c(54.2, 45.7),
+  `Karol Nawrocki` = c(45.8, 54.3)
+)
+
+# Generowanie tabeli z prawdopodobieństwami (procentami)
+kbl(df_procenty,
+    caption = "Procent głosów oddanych na Rafała Trzaskowskiego i Karola Nawrockiego według płci",
+    booktabs = TRUE,
+    align = c("l", "c", "c"),
+    digits = 1) %>%
+  kable_styling(position = "center", latex_options = c("hold_position", "striped"))
+```
+
+Na potrzeby analizy przyjęto, że zmienną objaśnianą jest decyzja o oddaniu głosu na Rafała Trzaskowskiego, zakodowana jako zmienna binarna (1 – głos na Trzaskowskiego, 0 – głos na Karola Nawrockiego). Takie ujęcie pozwala na zastosowanie miar takich jak ryzyko względne, różnica proporcji czy iloraz szans w celu oceny wpływu wybranych cech demograficznych (np. płci, miejsca zamieszkania) na preferencje wyborcze.
+
+Dla przykładu obliczono następujące miary:
+
+-   różnicę proporcji
+
+$$
+RP = p_k-p_m=0,542-0,457=0,085
+$$
+
+Różnica proporcji oznacza, o ile punktów procentowych częściej jedna grupa (kobiety) wskazała na danego kandydata w porównaniu do drugiej grupy (mężczyźni).\
+
+W tym przypadku odsetek kobiet, które w sondażu exit poll zadeklarowały głos na Rafała Trzaskowskiego, był o 8,5 punktu procentowego wyższy niż odsetek mężczyzn, którzy oddali na niego głos.\
+
+Można więc powiedzieć, że już na etapie obliczania różnicy proporcji widać istotne zróżnicowanie preferencji wyborczych ze względu na płeć.
+
+-   ryzyko względne (RR)
+
+    $$
+    RR = \cfrac{p_k}{p_m}=\cfrac{0,542}{0,457} \approx 1,186
+    $$
+
+    Wynik RR ≈ 1,186 oznacza, że kobiety miały około 18,6% wyższe prawdopodobieństwo oddania głosu na Rafała Trzaskowskiego niż mężczyźni. Tego typu wskaźnik sczególnie dobrze obrazuje względną różnicę w zachowaniu wyborczym między grupami, zwłaszcza w analizie wpływu cech demograficznych.
+
+-   iloraz szans (OR)
+
+$$
+OR = \cfrac{p_k(1-p_m)}{p_m(1-p_k)} \approx 1,41
+$$
+
+Wynik OR ≈ 1,41 oznacza, że szansa, iż kobieta zagłosuje na Trzaskowskiego, była około 1,41 razy większa niż szansa wśród mężczyzn.\
+W odróżnieniu od ryzyka względnego, iloraz szans uwzględnia proporcję głosów oddanych na kandydata i przeciw niemu, co czyni tę miarę bardziej czułą, zwłaszcza w analizach regresji logistycznej i przy interpretacjach zbliżonych do modeli predykcyjnych.\
+W kontekście społecznym oznacza to, że preferencje polityczne kobiet w tych wyborach zdecydowanie przechylały się w stronę Trzaskowskiego w większym stopniu niż u mężczyzn.
+
+Innym podziałem, który można zasugerować, jest podział ze względu na wielkość miejscowości, w której mieszka dany obywatel.
+
+Z sondażu wykonanego przez Ipsos dla TVP, TVN24 i Polsat News wynika, że Rafał Trzaskowski zdecydowanie wygrał w miastach powyżej 500 tys. mieszkańców, gdzie zagłosowało na niego 67,8% wyborców, podczas gdy na Karola Nawrockiego 32,2%. Wśród mieszkańców mniejszych miejscowości wyniki były odwrotne – Trzaskowski uzyskał poparcie 48,3%, a Nawrocki 51,7%.
+
+Dane te można przedstawić w formie tabelarycznej:
+
+```{r tab-pana2, echo=FALSE, results='asis', warning=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+# Dane wg miejsca zamieszkania
+df_miasta <- data.frame(
+  `Miejsce zamieszkania` = c("Miasta >500 tys.", "Pozostałe"),
+  `Rafał Trzaskowski` = c(67.8, 48.3),
+  `Karol Nawrocki` = c(32.2, 51.7)
+)
+
+# Generowanie tabeli
+kbl(df_miasta,
+    caption = "Procent głosów oddanych na Rafała Trzaskowskiego i Karola Nawrockiego według miejsca zamieszkania",
+    booktabs = TRUE,
+    align = c("l", "c", "c"),
+    digits = 1) %>%
+  kable_styling(position = "center", latex_options = c("hold_position", "striped"))
+
+```
+
+W miastach powyżej 500 tys. mieszkańców odsetek głosów oddanych na Rafała Trzaskowskiego był o 19,5 punktu procentowego wyższy niż wśród mieszkańców pozostałych miejscowości (różnica proporcji, RP = 0,195), co wskazuje na silne zróżnicowanie poparcia ze względu na miejsce zamieszkania. Mieszkańcy największych miast mieli około 40% większe prawdopodobieństwo zagłosowania na Trzaskowskiego niż osoby spoza tych ośrodków (ryzyko względne, RR ≈ 1,40), co potwierdza znaczące różnice w preferencjach wyborczych między tymi grupami. Dodatkowo, szansa oddania głosu na Trzaskowskiego była ponad 2,25 razy większa wśród mieszkańców dużych miast niż u pozostałych wyborców (iloraz szans, OR ≈ 2,26), co podkreśla intensywność tego zjawiska i jego możliwe znaczenie polityczne i społeczne.
+
+Tego typu miary nie tylko pozwalają określić kierunek zależności, ale również porównywać intensywność wpływu różnych zmiennych na decyzję wyborczą. Dzięki nim możemy np. ocenić, czy płeć, czy miejsce zamieszkania silniej różnicowały poparcie dla danego kandydata – w tym przypadku wyraźnie widać, że zamieszkanie w dużym mieście wiązało się z większą różnicą w poparciu dla Trzaskowskiego niż płeć wyborcy. Takie podejście pozwala lepiej zrozumieć strukturę elektoratu i relatywne znaczenie poszczególnych cech demograficznych.
+
+## Inne narzędzia statystyczne stosowane w analizie danych sondażowych
+
+W tym miejscu warto również wspomnieć o innych narzędziach statystycznych, które mogą być wykorzystywane w analizie i przetwarzaniu danych zebranych w badaniach typu exit poll, choć nie będą one szczegółowo omawiane w niniejszej pracy. Część z nich to wszechstronne i ugruntowane metody analityczne, których obecność w badaniach nad preferencjami politycznymi – ze względu na złożoność i dynamiczny charakter tego środowiska – nie budzi zdziwienia. Inne natomiast to bardziej kontrowersyjne lub nowatorskie podejścia, które dopiero zyskują zastosowanie w tym obszarze i wymagają dalszych badań empirycznych, zanim staną się standardowym elementem analiz wyborczych.
+
+### Testy statystyczne
+
+Poza wcześniej omówionymi metodami, w analizie danych pochodzących z badań typu exit poll szeroko stosowane są również inne testy statystyczne, pozwalające weryfikować hipotezy badawcze i oceniać siłę oraz istotność zaobserwowanych zależności. Do najczęściej wykorzystywanych testów należą:
+
+-    **Test chi-kwadrat niezależności** – służy do oceny, czy istnieje istotna statystycznie zależność pomiędzy dwiema zmiennymi nominalnymi, np. płcią a wyborem kandydata. Jest często wykorzystywany w analizach tabel kontyngencji w badaniach exit poll.
+
+-   **Testy proporcji (np. test Z)** – wykorzystywane są do porównania dwóch lub więcej proporcji, np. odsetka głosów oddanych na danego kandydata w dwóch różnych grupach demograficznych. Pozwala to ustalić, czy zaobserwowane różnice są statystycznie istotne, czy mogą wynikać z losowych odchyleń.
+
+-   **Testy istotności różnic średnich (np. test t-Studenta)** – choć rzadziej stosowane w analizie preferencji wyborczych (które mają charakter dychotomiczny), mogą być użyteczne przy analizie zmiennych ilościowych, takich jak wiek respondentów.
+
+-   **Analiza wariancji (ANOVA)** – stosowana w sytuacjach, gdy porównujemy więcej niż dwie grupy (np. poparcie dla kandydatów w różnych przedziałach wiekowych), w celu ustalenia, czy różnice między grupami są istotne statystycznie.
+
+-   **Korelacja rang Spearmana i współczynnik phi** – te miary korelacji są używane w analizach zmiennych porządkowych lub binarnych, aby ocenić siłę i kierunek związku między zmiennymi np. poziomem wykształcenia a preferencjami wyborczymi.
+
+Zastosowanie powyższych testów pozwala na pogłębioną weryfikację hipotez badawczych i zwiększenie rzetelności wniosków wyciąganych na podstawie danych sondażowych, zwłaszcza w kontekście uwarunkowań społeczno-demograficznych.
+
+### Cube method
+
+Cube method to zaawansowana technika doboru próby, która umożliwia losowe, ale zbalansowane względem zmiennych pomocniczych próbkowanie jednostek. Jej główną zaletą jest zwiększenie reprezentatywności próby poprzez zapewnienie, że rozkład wybranych zmiennych w próbie odpowiada rozkładowi w populacji. Schemat działania opiera się na tzw. losowym błądzeniu (random walk) po wielowymiarowej przestrzeni możliwych prób – od punktu startowego, określonego przez prawdopodobieństwa wylosowania jednostek, aż do najbliższego punktu spełniającego warunki równowagi (balansu). Metoda ta interesuje badaczy, ponieważ pozwala łączyć zalety losowości z kontrolą nad strukturą próby, co jest szczególnie istotne w badaniach sondażowych, gdzie dostępne są dane historyczne lub statystyki pomocnicze. Metodą tą zajmuję się m.in. dr Kozłowski w artykule *The use of non-sample information in exit poll surveys in Poland*\supref{11} oraz prof. Yves Tillé w *Ten years of balanced sampling with the cube method: An appraisal*\supref{12}.
+
+### Badanie wpływów modiyfikacji procedury ankietowej na odpowiedzi
+
+Eksperymenty tego typu analizują, jak konkretne zmiany w procedurze ankietowania — na przykład wprowadzenie specjalnych materiałów informacyjnych dla ankieterów lub drobnych upominków dla respondentów — wpływają na wskaźnik odpowiedzi oraz jakość danych. Przykładem jest badanie Merkle’a i Edelmana z 2009 roku\supref{13}, które wykazało, że zastosowanie kolorowej teczki informacyjnej nieznacznie zwiększyło liczbę odpowiedzi, lecz jednocześnie spowodowało większe zniekształcenia w wynikach, co pokazuje, że poprawa wskaźnika odpowiedzi nie zawsze idzie w parze z lepszą jakością danych.
+
+
+## Badanie rzetelności wyników wyborów
+
+Wyniki exit poll, czyli sondaży przeprowadzanych bezpośrednio po oddaniu głosu przez wyborców, stanowią ważne narzędzie do weryfikacji poprawności i rzetelności wyborów. Ponieważ exit poll zbierają informacje o rzeczywistych wyborach ludzi w danym momencie, ich wyniki pozwalają na szybkie oszacowanie rezultatów głosowania jeszcze przed oficjalnym podliczeniem głosów. Porównanie tych wstępnych wyników z oficjalnymi danymi wyborczymi umożliwia wykrycie potencjalnych rozbieżności, które mogą wskazywać na błędy w procesie głosowania, fałszerstwa lub problemy techniczne.
+
+W praktyce, jeśli exit poll znacząco odbiega od oficjalnych wyników, może to budzić podejrzenia co do wiarygodności całego procesu wyborczego. Takie rozbieżności mogą wynikać z manipulacji, ale także z błędów w samej organizacji wyborów, np. niewłaściwego zliczania głosów czy problemów z zabezpieczeniem urn. Dzięki temu exit poll działają jako swego rodzaju „kontrolny mechanizm” – choć same nie są wolne od błędów, takich jak brak odpowiedzi czy błąd próbkowania, to ich niezależność i szybkie wyniki pozwalają na pierwsze wykrycie ewentualnych nieprawidłowości.
+
+Do formalnej oceny zgodności wyników exit poll z oficjalnymi danymi wykorzystuje się różne testy statystyczne i miary błędu. Przykładowo, test chi-kwadrat pozwala sprawdzić, czy rozkład głosów w exit poll istotnie różni się od oficjalnych wyników, a test Z na różnicę proporcji ocenia, czy odsetki głosów dla konkretnych kandydatów są statystycznie różne. Dodatkowo, miary takie jak błąd średniokwadratowy (MSE) lub średni bezwzględny błąd (MAE) pomagają określić przeciętne odchylenia wyników exit poll od rzeczywistych wartości. Analiza błędu składowego, zarówno ze znakiem, jak i bezwzględnego, wskazuje natomiast kierunek i wielkość ewentualnego uprzedzenia w próbie. Wszystkie te narzędzia statystyczne umożliwiają kompleksową ocenę, czy różnice między danymi są wynikiem przypadkowych fluktuacji, czy też mogą sygnalizować poważniejsze problemy z procesem wyborczym.
+
+# Wnioski
+
+## Podsumowanie pracy
+
+Celem pracy było omówienie najważniejszych metod statystycznych stosowanych w badaniach typu exit poll, ze szczególnym uwzględnieniem ich wpływu na jakość prognoz wyborczych. Przeanalizowano m.in. schematy doboru próby (warstwowanie, próbki związane), sposoby postępowania z brakującymi danymi oraz metody analizy powiązań demograficznych z preferencjami wyborczymi. Wskazano zarówno zalety, jak i ograniczenia poszczególnych technik, opierając się na danych empirycznych i literaturze przedmiotu. Praca podkreśla, że odpowiednie zastosowanie metod statystycznych ma kluczowe znaczenie dla trafności i wiarygodności wyników exit poll, a przez to – dla odbioru społecznego wyników wyborów.
+
+## Dalsze kierunki rozwoju
+
+Badania typu exit poll, choć skuteczne, muszą nadążać za dynamicznie zmieniającym się społeczeństwem i jego wzorcami mobilności, komunikacji oraz preferencji politycznych. Coraz częstsze migracje mieszkańców pomiędzy miastami a mniejszymi miejscowościami, rosnąca niestabilność elektoratu oraz większa fragmentacja sceny politycznej (zmniejszający się udział dwóch głównych partii) sprawiają, że tradycyjne podejścia statystyczne mogą okazać się niewystarczające.
+W związku z tym istotne będzie wdrażanie nowoczesnych technologii – w tym metod uczenia maszynowego oraz narzędzi do analiz predykcyjnych, które mogą wspomóc konstrukcję prób oraz identyfikację niewidocznych wcześniej wzorców zachowań. Rozwój takich rozwiązań oraz integracja danych z różnych źródeł (np. mediów społecznościowych, danych geolokalizacyjnych) może w przyszłości zwiększyć dokładność i odporność exit poll na zmiany społeczne.
+
+
+\newpage
+
+# Źródła {#sources}
+
+1.  ::: {#zr1}
+    TVN24. 2021. [*Exit poll – jak się przeprowadza ten sondaż i jaki jest margines błędu*](https://tvn24.pl/polska/exit-poll-co-to-jest-przebieg-wyniki-blad-pomiaru-st5160010).
+    :::
+
+2.  ::: {#zr2}
+    Łukasz Kubisz-Muła. 2013. [*Badanie exit poll – historia, funkcje i specyfika*](https://www.ceeol.com/search/article-detail?id=114170).
+    :::
+
+3.  ::: {#zr3}
+    Konrad Krystian Kuźma. 2021. [*Badanie wyborcze realizowane w dniu wyborów prezydenckich w 2010 roku jako przykład badania realizowanego w miejscu publicznym*](https://www.studiapolitologiczne.pl/Badanie-wyborcze-realizowane-nw-dniu-wyborow-prezydenckich-w-2010-roku-njako-przyklad,136134,0,1.html).
+    :::
+
+4.  ::: {#zr4}
+    Adam Gendźwiłł, Jakub Rutkowski. 2015. [*Czy exit poll się pomylił?*](https://www.maszglos.pl/wp-content/uploads/2015/07/5.Exit-poll_A.Gendzwill_J.Rutkowski-2.pdf).
+    :::
+
+5.  ::: {#zr5}
+    Wywiad Terence Smith z Warrenem Mitofskym. 2004. [*What went wrong?*](https://web.archive.org/web/20041110024507/http:/www.pbs.org/newshour/bb/politics/july-dec04/exitpolls_11-05.html).
+    :::
+
+6.  ::: {#zr6}
+    Matt A. Barreto, Matthew J. Streb, Mara Marks, Fernando Guerra. 2006. [*Do Absentee Voters Differ from Polling Place Voters? New Evidence from California*](https://academic.oup.com/poq/article-abstract/70/2/224/1912438).
+    :::
+
+7.  ::: {#zr7}
+    Arkadiusz Kozłowski. 2012. [*The usefullness of past data in sampling design for exit poll surveys*](https://www.ue.katowice.pl/fileadmin/_migrated/content_uploads/4_A.Kozlowski_The_Usefulness_of_Past_Data....pdf).
+    :::
+
+8.  ::: {#zr8}
+    PKW. [Dane dotyczące wyników wyborów prezydenckich w 2020 roku](https://prezydent20200628.pkw.gov.pl/prezydent20200628/pl/dane_w_arkuszach).
+    :::
+
+9.  ::: {#zr9}
+    Money.pl. [Wyniki exit poll. Tak głosowano ze względu na płeć](https://www.money.pl/gospodarka/wyniki-exit-poll-tak-glosowano-ze-wzgledu-na-plec-7163104714623712a.html).
+    :::
+
+10. ::: {#zr10}
+    Cezary Faber; RMF24. [Jak głosowały miasta, a jak wieś? Sondażowe wyniki exit poll](https://www.rmf24.pl/raporty/raport-wybory-prezydenckie-2025/news-jak-glosowaly-miasta-a-jak-wies-sondazowe-wyniki-exit-poll,nId,7976526).
+    :::
+
+11. ::: {#zr11}
+    Arkadiusz Kozłowski. 2014. [*The use of non-sample information in exit poll surveys in Poland*](https://sit.stat.gov.pl/Article/567).
+    
+12. ::: {#zr12}
+    Yves Tillé; 2011. [*Ten years of balanced sampling with the cube method: An appraisal*](https://www.researchgate.net/publication/235972616_Ten_years_of_balanced_sampling_with_the_cube_method_An_appraisal).
+    :::
+
+13. ::: {#zr13}
+    Daniel M. Merkle , Murray Edelman. 2009. [*An Experiment on Improving Response Rates and Its Unintended Impact on Survey Error*](https://www.researchgate.net/publication/235972616_Ten_years_of_balanced_sampling_with_the_cube_method_An_appraisal).
+    :::
+
+14. ::: {#zr14}
+    [Repozytorium z kodem źródłowym oraz danymi użytymi w analizie](https://github.com/Oliwia-Makuch/exitpoll).
+    :::
